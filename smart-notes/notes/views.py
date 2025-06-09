@@ -1,16 +1,14 @@
 from django.shortcuts import render
 from django.http import Http404
+from django.views.generic import DetailView, ListView
 
 from .models import Note
 
-def list(request):
-    all_notes = Note.objects.all()
-    return render(request, 'notes/notes_list.html', {'notes': all_notes})
+class NotesView(ListView):
+    model = Note
+    context_object_name = "notes"
+    template_name = "notes/notes_list.html"
 
-def detail(request, note_id):
-    try:
-        note = Note.objects.get(pk=note_id)
-    except Note.DoesNotExist:
-        raise Http404("Note does not exist")
-    
-    return render(request, 'notes/note_detail.html', {'note': note})
+class NotesDetailView(DetailView):
+    model = Note
+    context_object_name = "note"
