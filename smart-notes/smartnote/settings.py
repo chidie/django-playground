@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Custom apps
-    'home',  # Assuming you have a 'home' app for managing notes
-    'notes',  # Assuming you have a 'notes' app for note-taking functionality
+    'home',  # For managing notes in the 'home' app 
+    'notes',  # For note-taking functionality in the 'notes' app 
 ]
 
 MIDDLEWARE = [

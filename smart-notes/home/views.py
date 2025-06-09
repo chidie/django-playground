@@ -8,8 +8,6 @@ def home(request):
     Render the home page of the SmartNote application.
     """
     return render(request, 'home/welcome.html', {'today': datetime.now()})
-    # return HttpResponse("<h1>Welcome to SmartNote!</h1><p>Your personal note-taking application.</p>")
-    # 
 
 @login_required(login_url='/admin')
 def authorize(request):
