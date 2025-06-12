@@ -1,14 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-    <h1>List of notes</h1>
-    <ul>
+{% extends "base.html" %}
+
+{% block content %}
+    <header>
+        <h1 class="text-center">Notes List</h1>
+    </header>
+    <div class="row row-cols3 g-3">
         {% for note in notes %}
-            <li>
-                {{ note.title }}
-                <p>{{ note.content|truncatewords:20 }}</p>
-            </li>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="{% url 'note_detail' pk=note.id %}">
+                            <h5 class="card-title">{{ note.title }}</h5>
+                        </a>
+                        <p class="card-text">{{ note.content|truncatechars:25 }}</p>
+                    </div>
+                </div>
+            </div>
         {% empty %}
-            <li>No notes available.</li>
+            <div>No notes available.</div>
         {% endfor %}
-    </ul>
-</html>
+        <!-- <a href="{% url 'logout' %}">Logout</a> -->
+    </div>
+{% endblock %}

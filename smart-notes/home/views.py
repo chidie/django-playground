@@ -1,18 +1,42 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from datetime import datetime
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy    
+from django.views.generic.edit import CreateView
 
-def home(request):
+class SignUpView(CreateView):
     """
-    Render the home page of the SmartNote application.
+    Class-based view for user registration in the SmartNote application.
     """
-    return render(request, 'home/welcome.html', {'today': datetime.now()})
+    form_class = UserCreationForm
+    template_name = 'home/signup.html'
+    success_url = reverse_lazy('login')  # Redirect to login page after successful registration
 
-@login_required(login_url='/admin')
-def authorize(request):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['today'] = datetime.now()
+        return context
+
+class HomeView(TemplateView):
     """
-    Render the authorization page for the SmartNote application.
+    Class-based view for rendering the home page of the SmartNote application.
     """
-    return render(request, 'home/authorize.html', {'today': datetime.now()})
-    # return HttpResponse("<h1>Authorization Page</h1><p>Please authorize your account.</p>")
+    template_name = 'home/welcome.html'
+    extra_context = {'today': datetime.now()}
+
+class AuthorizeView(LoginRequiredMixin, TemplateView):
+    template_name = 'home/authorize.html'
+    login_url = '/admin'
+
+class LoginInterfaceView(LoginView):
+    """
+    Class-based view for handling user login.
+    """
+    template_name = 'home/login.html'
+    # redirect_authenticated_user = True  # Redirect to home if user is already authenticated
+
+    # def get_success_url(self):
+    #     return self.get_redirect_url() or '/notes/list'  # Redirect to notes list after login
