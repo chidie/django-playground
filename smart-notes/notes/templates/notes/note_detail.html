@@ -1,6 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-    <h1>{{note.title}}</h1>
-    <p>{{note.content}}</p>
-    <p>Created at: {{note.created_at}}</p>
-</html>
+{% extends "base.html" %}
+{% block content %}
+    <div class="border rounded p-3">
+        <h1 class="my-5">{{note.title}}</h1>
+        <p class="text-muted">
+            {% if note.is_public %}
+                <span class="badge bg-success">Public</span>
+            {% else %}
+                <span class="badge bg-secondary">Private</span>
+            {% endif %}
+        </p>
+        <p>{{note.content}}</p>
+        <p>Created at: {{note.created_at}}</p>
+    </div>
+    <!-- <p><span id="likes-count">{{ note.number_of_likes }} Likes</span></p> -->
+    <p>{{ note.number_of_likes }} Likes</p>
+    <form method="POST", action="{% url 'note_like' pk=note.id %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary my-3" id="like-btn">Like</button>
+    </form>
+    <form method="POST" action="{% url 'toggle_public' pk=note.id %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-warning my-3">
+            {% if note.is_public %} Make private {% else %} Make public {% endif %}
+        </button>
+    </form>
+    <a href="{% url 'notes_list' %}" class="btn btn-secondary my-3">Back to Notes List</a>
+    <a href="{% url 'note_update' pk=note.id %}" class="btn btn-primary my-3">Edit Note</a>
+    <a href="{% url 'note_delete' pk=note.id %}" class="btn btn-danger my-3">Delete Note</a>
+     
+    <!-- <script>
+        document.getElementById('like-btn').onclick = function() {
+            fetch("{% url 'note_like' pk=note.id %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'x-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('likes-count').textContent = data.likes;
+            });
+        }
+    </script>   -->
+{% endblock %}
