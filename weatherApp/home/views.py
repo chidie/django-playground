@@ -41,7 +41,7 @@ def weather_report(request):
         form = CityForm(request.POST)
         if form.is_valid():
             city = form.cleaned_data['city']
-            API_KEY = 'ed3ef0c75bf8400e7de2a1854cfd3b47'
+            API_KEY = 'login https://openweathermap.org/ to get your API key'
             response = urllib.request.urlopen(f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric').read()
             weather_data = json.loads(response)
             return render(request, 'home/weather_report.html', {'data': weather_data})
